@@ -1,0 +1,86 @@
+
+
+name: PHP Code Quality
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:                                    
+  lint:                                     
+   name: PHP Lint             
+   runs-on: ubuntu-latest
+
+   steps:
+     - name: Checkout code
+       uses: actions/checkout@v2     
+
+     - name: Setup PHP
+       uses: /setup-php@v2            
+       with:
+         php-version: '7.4'                  
+
+     - name: PHP lint
+       run: php -l /sample_php &> /tmp/ 
+
+  phpcs:
+    name: PHP CodeSniffer
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2  
+
+      - name: Setup PHP
+        uses: /setup-php@v2
+        with:
+          php-version: '7.4'
+
+      - name: Install PHPCS
+        run: composer require --dev squizlabs/php_codesniffer
+
+      - name: PHP CodeSniffer
+        run: vendor/bin/phpcs --standard=PSR2 /sample_php
+
+ phpmd:
+    name: PHP Mess Detector
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: /setup-php@v2
+        with:
+          php-version: '7.4'
+
+      - name: Install PHPMD
+        run: composer require --dev phpmd/phpmd
+
+      - name: PHP Mess Detector
+        run: vendor/bin/phpmd . text codesize,unusedcode,naming /sample_php
+
+  cbf:
+    name: Code Beautifier and Fixer
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: /setup-php@v2
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+
+      - name: Install PHP CS Fixer
+        run: composer require --dev friendsofphp/php-cs-fixer
+
+      - name: PHP CS Fixer
+        run: vendor/bin/php-cs-fixer fix --dry-run --verbose /sample_php
