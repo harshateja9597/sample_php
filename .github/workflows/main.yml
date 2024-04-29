@@ -3,10 +3,10 @@ name: PHP Code Quality
 on:
   push:
     branches:
-      - main
+      - master
   pull_request:
     branches:
-      - main
+      - master
 
 jobs:                                     
   lint:                                     
@@ -18,9 +18,9 @@ jobs:
        uses: actions/checkout@v2     
 
      - name: Setup PHP
-       uses: /setup-php@v2            
+       uses: shivammathur/setup-php@v2            
        with:
-         php-version: '7.4'                  
+         php-version: '>= 5.0'                  
 
      - name: PHP lint
        run: php -l /calcuator.php &> /tmp/ 
