@@ -1,4 +1,4 @@
-name: PHP Code Quality
+name: Code Quality Check
 
 on:
   push:
@@ -8,22 +8,31 @@ on:
     branches:
       - master
 
-jobs:                                     
-  lint:                                     
-   name: PHP Lint             
-   runs-on: ubuntu-latest
+jobs:
+  code-quality:
+    runs-on: ubuntu-latest
 
-   steps:
-     - name: Checkout code
-       uses: actions/checkout@v2     
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-     - name: Setup PHP
-       uses: shivammathur/setup-php@v2            
-       with:
-         php-version: '>= 5.0'                  
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
 
-     - name: PHP lint
-       run: php -l /calcuator.php &> /tmp/ 
+      - name: Install Composer dependencies
+        run: composer install
 
- 
-  
+      - name: PHP lint
+        run: php -l .
+
+      - name: PHP_CodeSniffer
+        run: vendor/bin/phpcs
+
+      - name: PHP Mess Detector
+        run: vendor/bin/phpmd . text phpmd.xml
+
+      - name: PHP Code Beautifier and Fixer
+        run: vendor/bin/phpcbf
+        continue-on-error: true
