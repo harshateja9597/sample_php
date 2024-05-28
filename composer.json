@@ -1,5 +1,5 @@
 {
-    "name": "php-sample",
+    "name": "vidya/php-sample",
     "description": "Simple calculator program in PHP.",
     "keywords": ["multiply", "add", "subtract"],
     "license": "MIT",
@@ -19,4 +19,3 @@
         "friendsofphp/php-cs-fixer": "^3.1"
     }
 }
-
