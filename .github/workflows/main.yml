@@ -35,4 +35,3 @@ jobs:
 
       - name: PHP Code Beautifier and Fixer
         run: vendor/bin/phpcbf
-        continue-on-error: true
